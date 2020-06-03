@@ -1,4 +1,4 @@
-api_url = "https://api.mdstaff.com/webapi/api/countyofsantaclarahealthinpatientnursing/"
+api_url = "J"
 inpatient_username = "X"
 inpatient_password = "Y"
 inpatient_instance = "K"
