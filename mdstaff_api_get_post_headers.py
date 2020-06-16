@@ -12,7 +12,7 @@ def get_post_headers(auth_token):
 
 def main():    
     headers = get_post_headers(auth_token)
-    return headers
+    
 
 if __name__ == "__main__":
     main()
