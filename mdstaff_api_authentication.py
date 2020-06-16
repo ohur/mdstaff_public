@@ -1,7 +1,8 @@
 import requests
 import mdstaff_api_const
 import sys
-sys.path.insert(1, '../util/')
+sys.path.insert(1, '..\\util')
+sys.path.insert(2, 'C:\\OscarScripts\\util')
 import calendar_datetime
 
 def get_auth_token(instance = "inpatient"):   
