@@ -1,8 +1,7 @@
 import requests
 import mdstaff_api_const
 import sys
-sys.path.insert(1, '..\\util')
-sys.path.insert(2, 'C:\\OscarScripts\\util')
+sys.path.insert(1, '../util/')
 import calendar_datetime
 import logging
 
