@@ -37,9 +37,6 @@ def put_demographic(headers, instance):
     
             logger.info(wkday + ". API URL: " + api_url)
             
-    
-            
-    
             data = '{"FirstName":"' + firstname + '", "MiddleName":"' + middlename + '","LastName":"' + lastname + '"}'
             print(data)
     
