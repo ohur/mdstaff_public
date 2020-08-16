@@ -104,7 +104,7 @@ def mdstaff_reports(instance):
     # writing the reports through API
     #
 
-    output_file = dir_path + "/data/mdstaff_report_" + instance + "_" + today_date  + ".txt"
+    output_file = dir_path + "/data/mdstaff_report_" + instance + ".txt"
     logger.info(wkday + ". " + instance + ".  Writing report " + output_file)
     with open (output_file, "w", newline = "") as output_file_fh:
         csv_writer =csv.writer(output_file_fh, delimiter = "|")
