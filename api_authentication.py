@@ -9,7 +9,7 @@ from calendar_datetime import get_current_time
 import logging
 import socket
 
-def get_auth_token(instance):
+def get_auth_token(instance = "sccin"):
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     output_file = dir_path + "/data/mdstaff_api_authentication.txt"
@@ -28,7 +28,7 @@ def get_auth_token(instance):
         facility_id = api_const.ambulatory_facility_id
         log_file = dir_path + api_const.ambulatory_log_file
 
-    output_file_obj = open(output_file, "w")
+    #output_file_obj = open(output_file, "w")
 
     wkday = get_today_wkday()
 
@@ -50,8 +50,8 @@ def get_auth_token(instance):
     }
 
     logger.info(wkday + ". " + instance + ". Starting authentication")
-    output_file_obj.write(username + " " + password + " " + instance + " " + \
-                          facility_id + "\n\n")
+    #output_file_obj.write(username + " " + password + " " + instance + " " + \
+    #                      facility_id + "\n\n")
     mdstaff_auth_url = "https://api.mdstaff.com/webapi/api/tokens"
     auth_response = requests.post(mdstaff_auth_url, data = credentials)
 
@@ -61,9 +61,9 @@ def get_auth_token(instance):
     auth_token_type = auth_response_json["token_type"]
     auth_expire = auth_response_json["expires_in"]
 
-    output_file_obj.write("access_token:\n" + auth_token + "\n\n")
-    output_file_obj.write("token_type:\n" + auth_token_type + "\n\n")
-    output_file_obj.write("expires_in:\n" + str(auth_expire) + "\n\n")
+    #output_file_obj.write("access_token:\n" + auth_token + "\n\n")
+    #output_file_obj.write("token_type:\n" + auth_token_type + "\n\n")
+    #output_file_obj.write("expires_in:\n" + str(auth_expire) + "\n\n")
     current_time = get_current_time()
 
     if hostname == "hhssvninappt001" or hostname == "hhssvninappp001":
@@ -72,16 +72,16 @@ def get_auth_token(instance):
         print("Token:\n" + auth_token + "\n")
         print("Current time: " + current_time)
 
-    output_file_obj.write("current time:\n" + current_time + "\n\n")
+    #output_file_obj.write("current time:\n" + current_time + "\n\n")
     logger.info(wkday + ". " + instance + ". Completing authentication")
-    output_file_obj.close()
+    #output_file_obj.close()
 
     return auth_token
 
 
 
 def main():
-    auth_token = get_auth_token(instance)
+    auth_token = get_auth_token(instance = "sccin")
 
 
 if __name__ == "__main__":

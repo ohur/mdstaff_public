@@ -58,7 +58,8 @@ def get_lookups(headers, instance, lookup_type):
             description = i["Description"]            
             csv_writer.writerow([description, id_code])
             table_hash[id_code] = description
-
+            
+    logger.info(wkday + ". " + instance + ". Completing lookup.")
     return table_hash
 
 

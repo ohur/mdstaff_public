@@ -85,7 +85,7 @@ def mdstaff_reports(instance):
     # get the appointment data
     # for department and division data of the staff
 
-    providerids_to_apptids_hash, providerids_to_depts_hash, providerids_to_divsid_hash = \
+    providerids_to_apptids_hash, providerids_to_depts_hash, providerids_to_divs_hash = \
         get_appointments(instance, providerid_list)
 
     # get department and division names from lookup table
@@ -97,46 +97,42 @@ def mdstaff_reports(instance):
     get_headers = api_get_headers.get_headers(auth_token)
     dept_hash = get_lookups(get_headers, instance, "department")
 
-    if instance == "inpatient":
+    if instance == api_const.inpatient_instance:
         # get the division data of VMC, OCH, SLRH
         div_hash = get_lookups(get_headers, instance, "division")
-
 
     # writing the reports through API
     #
 
     output_file = dir_path + "/data/mdstaff_report_" + instance + "_" + today_date  + ".txt"
+    logger.info(wkday + ". " + instance + ".  Writing report " + output_file)
     with open (output_file, "w", newline = "") as output_file_fh:
         csv_writer =csv.writer(output_file_fh, delimiter = "|")
         csv_writer.writerow(["sccuid", "fullname", "licnum", "licexp", "division", "dept"])
 
         for providerid, sccuid in providerids_to_sccuids_hash.items():
-            fullname = providerids_to_names_hash[providerid]            
-            
+            fullname = providerids_to_names_hash[providerid]
+            div = ""
+
             try:
                 licnum = providerids_to_licnums_hash[providerid]
             except:
                 logger.critical(wkday + ". " + instance + ".  Lic Num not found for " + \
                                 fullname + " " + sccuid)
-                continue
-                
+
             try:
                 licexp = providerids_to_licexps_hash[providerid]
             except:
                 logger.critical(wkday + ". " + instance + ".  Lic Expiration not found for " + \
                                 fullname + " " + sccuid)
-                continue
-                
-            if instance == "inpatient":
+
+            if instance == api_const.inpatient_instance:
                 try:
                     div_code = providerids_to_divs_hash[providerid]
                     div = div_hash[div_code]
                 except:
                     logger.critical(wkday + ". " + instance + ".  Division not found for " + \
                                 fullname + " " + sccuid)
-                    continue                
-            else:
-                div = ""
 
             try:
                 dept_code = providerids_to_depts_hash[providerid]
@@ -160,10 +156,13 @@ def mdstaff_reports(instance):
 
     end_time_obj = datetime.datetime.now()
     diff_time = (end_time_obj - begin_time_obj).total_seconds()
-    diff_time = int(diff_time)
+    diff_time_sec = int(diff_time)
+    diff_time_min = diff_time_sec / 60
+    diff_time_min = str(round(diff_time_min, 2))
     logger.info(wkday + ". " + instance + ".  MDStaff License Report created " + output_file)
-    logger.info(wkday + ". " + instance +  ".  Run ends.  It took " + str(diff_time) + " second(s) to complete")
-
+    logger.info(wkday + ". " + instance +  ".  Run ends.  It took " + str(diff_time_sec) + \
+                " seconds or " + diff_time_min + " minutes to complete")
+    logger.info("=================")
 
 
 def main():

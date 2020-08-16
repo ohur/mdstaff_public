@@ -65,8 +65,8 @@ def get_credential(instance, providerid_list):
             counter = counter + 1
 
             # API authentication expires in about 15 minutes
-            # So after each 1500 iterations, we will get authentication again
-            if (counter % 1500 == 0) or counter == 1:
+            # So after each 1700 iterations, we will get authentication again
+            if (counter % 1700 == 0) or counter == 1:
                 auth_token = get_auth_token(instance)
                 headers = api_get_headers.get_headers(auth_token)
 
