@@ -7,12 +7,27 @@ import os
 from calendar_datetime import get_today_wkday
 from calendar_datetime import get_current_time
 import logging
+import socket
 
 def get_auth_token(instance):
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     output_file = dir_path + "/data/mdstaff_api_authentication.txt"
-    log_file = dir_path + api_const.log_file
+    hostname = socket.gethostname().lower().strip()
+    log_file = ""
+    password = ""
+    facility_id = ""
+
+    if instance == api_const.inpatient_instance:
+        password = api_const.inpatient_password
+        facility_id = api_const.inpatient_facility_id
+        log_file = dir_path + api_const.inpatient_log_file
+
+    elif instance == api_const.ambulatory_instance:
+        password = api_const.ambulatory_password
+        facility_id = api_const.ambulatory_facility_id
+        log_file = dir_path + api_const.ambulatory_log_file
+
     output_file_obj = open(output_file, "w")
 
     wkday = get_today_wkday()
@@ -25,16 +40,6 @@ def get_auth_token(instance):
     logger = logging.getLogger(__name__)
 
     username = api_const.username
-    
-    if instance == api_const.inpatient_instance:
-        # inpatient nursing
-        password = api_const.inpatient_password
-        facility_id = api_const.inpatient_facility_id
-
-    elif instance == api_const.ambulatory_instance:
-        # ambulatory nursing
-        password = api_const.ambulatory_password
-        facility_id = api_const.ambulatory_facility_id
 
     credentials = {
         "grant_type" : "password",
@@ -44,8 +49,7 @@ def get_auth_token(instance):
         "facilityID" : facility_id
     }
 
-    logger.info(wkday + ". Starting authentication")
-    print(username, password, instance, facility_id)
+    logger.info(wkday + ". " + instance + ". Starting authentication")
     output_file_obj.write(username + " " + password + " " + instance + " " + \
                           facility_id + "\n\n")
     mdstaff_auth_url = "https://api.mdstaff.com/webapi/api/tokens"
@@ -58,13 +62,19 @@ def get_auth_token(instance):
     auth_expire = auth_response_json["expires_in"]
 
     output_file_obj.write("access_token:\n" + auth_token + "\n\n")
-    print("Token:\n" + auth_token + "\n")
     output_file_obj.write("token_type:\n" + auth_token_type + "\n\n")
     output_file_obj.write("expires_in:\n" + str(auth_expire) + "\n\n")
-
     current_time = get_current_time()
-    print("Current time: " + current_time)
+
+    if hostname == "hhssvninappt001" or hostname == "hhssvninappp001":
+        pass
+    else:
+        print("Token:\n" + auth_token + "\n")
+        print("Current time: " + current_time)
+
     output_file_obj.write("current time:\n" + current_time + "\n\n")
+    logger.info(wkday + ". " + instance + ". Completing authentication")
+    output_file_obj.close()
 
     return auth_token
 
