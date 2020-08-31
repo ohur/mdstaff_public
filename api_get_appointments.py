@@ -75,18 +75,22 @@ def get_appointments(instance, providerid_list):
             except requests.exceptions.RequestException as err:
                 logging.critical(wkday + ". " + instance + ". OOps: Something Else: " + str(err))
                 logging.critical(wkday + ". " + instance + ". " + api_url)
+                continue
 
             except requests.exceptions.HTTPError as errh:
                 logging.critical(wkday + ". " + instance + ". Http Error: " + errh)
                 logging.critical(wkday + ". " + instance + ". " + api_url)
+                continue
 
             except requests.exceptions.ConnectionError as errc:
                 logging.critical(wkday + ". " + instance + ". Error Connecting: " + errc)
                 logging.critical(wkday + ". " + instance + ". " + api_url)
+                continue
 
             except requests.exceptions.Timeout as errt:
                 logging.critical(wkday + ". " + instance + ". Timeout Error: " + errt)
                 logging.critical(wkday + ". " + instance + ". " + api_url)
+                continue
 
             response_json = response.json()
             for i in response_json:

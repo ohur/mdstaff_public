@@ -77,22 +77,22 @@ def get_credential(instance, providerid_list):
             except requests.exceptions.RequestException as err:
                 logger.critical(wkday + ". " + instance + ". OOps: Something Else: " + str(err))
                 logger.critical(wkday + ". " + instance + ". " + api_url)
-
+                continue
 
             except requests.exceptions.HTTPError as errh:
                 logger.critical(wkday + ". " + instance + ". Http Error: " + errh)
                 logger.critical(wkday + ". " + instance + ". " + api_url)
-
+                continue
 
             except requests.exceptions.ConnectionError as errc:
                 logger.critical(wkday + ". " + instance + ". Error Connecting: " + errc)
                 logger.critical(wkday + ". " + instance + ". " + api_url)
-
+                continue
 
             except requests.exceptions.Timeout as errt:
                 logger.critical(wkday + ". " + instance + ". Timeout Error: " + errt)
                 logger.critical(wkday + ". " + instance + ". " + api_url)
-
+                continue
 
             logger.debug(wkday + ". Get_credential api return code: " + str(response.status_code))
             response_json = response.json()
