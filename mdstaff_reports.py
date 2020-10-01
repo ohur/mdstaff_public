@@ -8,8 +8,8 @@ import api_get_headers
 import os
 import sys
 import logging
-sys.path.insert(1, '../util/')
-sys.path.insert(2, "C:/OscarScripts/util")
+sys.path.insert(1, '..\\util\\')
+sys.path.insert(2, "C:\\OscarScripts\\util")
 from calendar_datetime import get_today_date_yyyymmdd
 from calendar_datetime import get_today_wkday
 import datetime
@@ -104,7 +104,7 @@ def mdstaff_reports(instance):
     # writing the reports through API
     #
 
-    output_file = dir_path + "/data/mdstaff_report_" + instance + ".txt"
+    output_file = dir_path + "\\data\\mdstaff_report_" + instance + "_" + today_date  + ".txt"
     logger.info(wkday + ". " + instance + ".  Writing report " + output_file)
     with open (output_file, "w", newline = "") as output_file_fh:
         csv_writer =csv.writer(output_file_fh, delimiter = "|")
@@ -113,6 +113,12 @@ def mdstaff_reports(instance):
         for providerid, sccuid in providerids_to_sccuids_hash.items():
             fullname = providerids_to_names_hash[providerid]
             div = ""
+            
+            if fullname is None:
+               fullname = ""
+                
+            if sccuid is None:
+                sccuid = ""
 
             try:
                 licnum = providerids_to_licnums_hash[providerid]
@@ -152,7 +158,7 @@ def mdstaff_reports(instance):
         shared_drive = "H:\\FTP-root\\Virtual_Folders\\NURSING\\mdstaff\\data\\"
         shared_file = shared_drive + "mdstaff_report_" + instance + "_" + today_date  + ".txt"
         copyfile(output_file, shared_file)
-        logger.info(wkday + ". " + instance + ".  Report copied to " + shared_drive + "/" + output_file)
+        logger.info(wkday + ". " + instance + ".  Report copied to " + shared_drive + "\\" + output_file)
 
     end_time_obj = datetime.datetime.now()
     diff_time = (end_time_obj - begin_time_obj).total_seconds()
